@@ -841,6 +841,18 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				damage.primary.value /= 2;
 				damage.secondary.value /= 2;
 			}
+			
+		if (caster) {
+			if (Player* casterPlayer = caster->getPlayer()) {
+				casterPlayer->applyBonusDamageBoost(damage, target);
+			}
+		}
+
+		if (target) {
+			if (Player* targetPlayer = target->getPlayer()) {
+				targetPlayer->applyBonusDamageReduction(damage, caster);
+			}
+		}
 
 			if (!damage.critical && damage.primary.type != COMBAT_HEALING && damage.origin != ORIGIN_CONDITION) {
 				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
